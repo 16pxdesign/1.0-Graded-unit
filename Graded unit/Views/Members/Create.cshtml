@@ -1,0 +1,151 @@
+﻿@using Graded_unit.Models.ViewModels;
+@model NewMember
+
+@{
+    ViewBag.Title = "View";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-8">
+        <div class="portlet light bordered">
+            <div class="portlet-title tabbable-line">
+                <div class="caption caption-md">
+                    <i class="icon-globe theme-font hide"></i>
+                    <span class="caption-subject font-blue-madison bold uppercase">Your info</span>
+                </div>
+            </div>
+            
+            <form>
+                <div class="portlet-body">
+                    <div>
+
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation"  class="main active" ><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Update</a></li>
+                            <li role="presentation"  class="profile" ><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+                            <li role="presentation" ><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+                            <li role="presentation" ><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div role="tabpanel" class="tab-pane active" id="main">
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Member.Id, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Member.Id, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Member.Id, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Member.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Member.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Member.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Member.MemberType, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EnumDropDownListFor(model => model.Member.MemberType, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Member.MemberType, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <div role="tabpanel" class="tab-pane ignore" id="profile">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Guardian.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Guardian.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Guardian.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="messages">Messages</div>
+                            <div role="tabpanel" class="tab-pane" id="settings">Settings</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-default" id="btnSave"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/jquery-ui-1.12.1.min.js")
+
+}
+
+
+    <script>
+
+        $(document).ready(function () {
+            //$('.profile').hide();
+            //$('#profile').hide();
+
+
+            $('#profile').find('*').addClass('ignore');
+
+
+            $("#btnSave").click(function () {
+                console.log("click");
+                $("form").data("validator").settings.ignore = ".ignore";
+
+               
+
+                var validator = $("form").validate();
+                var isValid = $("form").valid();
+                console.log("isvalid" + isValid);
+                if (!isValid) {
+                    var tab_id = jQuery(validator.errorList[0].element).closest(".tab-pane").attr('id');
+                    $('ul.nav-tabs li').removeClass('active');
+                    $('.tab-pane').removeClass('active');
+                    console.log(tab_id);
+                    $("." + tab_id).addClass('active');
+                    $("#" + tab_id).addClass('active');
+                }
+            });
+
+            $('ul.nav-tabs li').click(function () {
+                console.log("click li");
+                var tab_id = $(this).attr('class');
+                console.log(tab_id);
+                $('ul.nav-tabs li').removeClass('active');
+                $('.tab-pane').removeClass('active');
+                $(this).addClass('active');
+                $("#" + tab_id).addClass('active');
+            });
+
+         /*   $('ul.nav-tabs li').mouseover(function () {
+                console.log("mouse li");
+                var tab_id = $(this).attr('data-tab');
+                $('ul.nav-tabs li').removeClass('active');
+                $('.tab-pane').removeClass('active');
+                $(this).addClass('active');
+                $("#" + tab_id).addClass('active');
+            });*/
+        });
+    </script>
+}

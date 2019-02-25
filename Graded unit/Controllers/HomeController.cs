@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Graded_unit.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,8 +11,17 @@ namespace Graded_unit.Controllers
     {
         public ActionResult Index()
         {
+            User admin = new User();
+            admin.username = "admin";
+            admin.password = "password";
+            DatabaseModel db = new DatabaseModel();
+           // db.User.Add(admin);
+           // db.SaveChanges();
+
             return View();
         }
+
+
 
         public ActionResult About()
         {
