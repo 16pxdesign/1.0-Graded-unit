@@ -44,8 +44,32 @@ namespace Graded_unit.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(NewMember m)
         {
-            Console.WriteLine(m.ToString());
-            return View();
+            
+            if (m.Member.MemberType != MemberType.Junior)
+            {
+                foreach (var modelError in ModelState)
+                {
+                    string propertyName = modelError.Key;
+
+                    if (propertyName.Contains("Guardian"))
+                    {
+                        ModelState[propertyName].Errors.Clear();
+                    }
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+
+                return View();
+
+            }
+            else
+            {
+                ModelState.AddModelError("","Error msg");
+                return View();
+            }
+
         }
     }
 }

@@ -25,16 +25,17 @@
 
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation"  class="main active" ><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Update</a></li>
-                            <li role="presentation"  class="profile" ><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-                            <li role="presentation" ><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
-                            <li role="presentation" ><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                            <li role="presentation" class="tab-main active"><a href="" data-toggle="tab">Personal details</a></li>
+                            <li role="presentation" class="tab-address"><a href="" data-toggle="tab">Address</a></li>
+                            <li role="presentation" class="tab-guardian"><a href="" data-toggle="tab">Guardian</a></li>
+
+                            <li role="presentation"><a href="#settings" data-toggle="tab">Settings</a></li>
                         </ul>
 
                         <!-- Tab panes -->
                         <div class="tab-content">
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            <div role="tabpanel" class="tab-pane active" id="main">
+                            <div role="tabpanel" class="tab-pane active" id="tab-main">
 
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.Member.Id, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -56,8 +57,8 @@
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.Member.MemberType, htmlAttributes: new { @class = "control-label col-md-2" })
                                     <div class="col-md-10">
-                                        @Html.EnumDropDownListFor(model => model.Member.MemberType, htmlAttributes: new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.Member.MemberType, "", new { @class = "text-danger" })
+                                        @Html.EnumDropDownListFor(model => model.Member.MemberType, htmlAttributes: new { @class = "form-control" , id = "player-type" })
+                                        @Html.ValidationMessageFor(model => model.Member.MemberType, "", new { @class = "text-danger"  })
                                     </div>
                                 </div>
 
@@ -65,7 +66,7 @@
                             </div>
 
 
-                            <div role="tabpanel" class="tab-pane ignore" id="profile">
+                            <div role="tabpanel" class="tab-pane" id="tab-guardian">
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.Guardian.Name, htmlAttributes: new { @class = "control-label col-md-2" })
                                     <div class="col-md-10">
@@ -75,7 +76,7 @@
                                 </div>
 
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="messages">Messages</div>
+                            <div role="tabpanel" class="tab-pane" id="tab-address">Address</div>
                             <div role="tabpanel" class="tab-pane" id="settings">Settings</div>
                         </div>
 
@@ -102,11 +103,33 @@
     <script>
 
         $(document).ready(function () {
-            //$('.profile').hide();
-            //$('#profile').hide();
+            //$('.guardian').hide();
+            //$('#guardian').hide();
 
+            $('#player-type').ready(function() {
+                selectedPlayer(this,"tab-guardian");
+            });
+            $('#player-type').change(function(e) {
+                selectedPlayer(this, "tab-guardian");
+            });
 
-            $('#profile').find('*').addClass('ignore');
+            function selectedPlayer(item, panel) {
+                var selected = $(item).find(':selected').text();
+                
+                if (selected === "Junior") {
+                    $('#'+panel).find('*').removeClass('ignore');
+                    $('#' + panel).find('*').removeClass('hidden');
+                    $('.' + panel).find('*').removeClass('hidden');
+                } else {
+                    $('#' + panel).find('*').addClass('ignore');
+                    $('#' + panel).find('*').addClass('hidden');
+                    $('.' + panel).find('*').addClass('hidden');
+                }
+
+                console.log(selected);
+            }
+
+           
 
 
             $("#btnSave").click(function () {
@@ -138,14 +161,7 @@
                 $("#" + tab_id).addClass('active');
             });
 
-         /*   $('ul.nav-tabs li').mouseover(function () {
-                console.log("mouse li");
-                var tab_id = $(this).attr('data-tab');
-                $('ul.nav-tabs li').removeClass('active');
-                $('.tab-pane').removeClass('active');
-                $(this).addClass('active');
-                $("#" + tab_id).addClass('active');
-            });*/
+        
         });
     </script>
 }
